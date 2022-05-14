@@ -2,9 +2,9 @@
 #include "Dairy.h"
 #include "MyString.h"
 #include <fstream>
-#include <istream>
+//#include <istream>
 #include <cstring>
-
+#include <exception>
 #pragma warning (disable:4996)
 using namespace std;
 
@@ -34,13 +34,72 @@ bool Person::validatingName(char ch)
 	return (name[ch] <= 'a' && name[ch] >= 'z') || (!ch <= 'A' && name[ch] >= 'Z') || (name[ch] == ' ' || name[ch] == '\n') || (name[ch] >= '0' && name[ch] <= '9');
 }
 
-void Person::saveNamesToFile(const Person* customers, size_t count, ofstream& file)
+Person Person::createCustomer(const char* name, const char* password, const char* email)
 {
-	file.write((const char*)customers, count * sizeof(Person));
+	Person p;
+
+	size_t nameLength = strlen(name);
+	p.name = new char[nameLength + 1];
+	strcpy(p.name, name);
+	
+	size_t passwordLength = strlen(password);
+	p.password = new char[passwordLength + 1];
+	strcpy(p.password, password);
+
+	size_t emailLength = strlen(email);
+	p.email = new char[emailLength + 1];
+	strcpy(p.email, email);
+
+	return p;
 }
 
-
 //public
+
+void Person::saveInfoToFile(ofstream& file, const Person& p)
+{
+	size_t nameLength = strlen(p.name);
+	size_t passwordLength = strlen(p.password);
+	size_t emailLength = strlen(p.email);
+
+	file.write((const char*)&nameLength, sizeof(nameLength));
+	file.write(p.name, nameLength);
+
+	file.write((const char*)&passwordLength, sizeof(passwordLength));
+	file.write(p.password, passwordLength);
+
+	file.write((const char*)&emailLength, sizeof(emailLength));
+	file.write(p.email, emailLength);
+
+	cout << "Custormer personal data is saved!\n" << endl;
+}
+
+Person Person::readInfoFromFile(ifstream& file)
+{
+	Person p;
+
+	size_t nameLength;
+	size_t passwordLength;
+	size_t emailLength;
+
+	file.read((char*)&nameLength, sizeof(nameLength)); //we read the size of the name
+	p.name = new char[nameLength + 1];
+	file.read(p.name, nameLength);
+	p.name[nameLength] = '\0';
+
+	file.read((char*)&passwordLength, sizeof(passwordLength)); //we read the size of the password
+	p.password = new char[passwordLength + 1];
+	file.read(p.password, passwordLength);
+	p.password[passwordLength] = '\0';
+
+	file.read((char*)&emailLength, sizeof(emailLength)); //we read the size of the email
+	p.email = new char[emailLength + 1];
+	file.read(p.email, emailLength);
+	p.email[emailLength] = '\0';
+
+	return p;
+
+}
+
 
 Person::Person(const char* name, const char* password, const char* email)
 {
@@ -106,22 +165,22 @@ void Person::setEmail(const char* newEmail)
 
 }
 
-void Person::getInfo(const char* fileName)
-{
-	ofstream file(fileName, ios::app);
-	{
-		cout << "Enter your name:" << endl;
-		cin >> name;
-		cout << "Enter your password:" << endl;
-		cin >> password;
-		cout << "Enter your email:" << endl;
-		cin >> email;
-	}
-
-	file << "\nName:" << name << "\nPassword:" << password << "\nEmail:" << email << endl;
-	file.close();
-	cout << "Custormer personal data is saved!\n" << endl;
-}
+//void Person::getInfo(const char* fileName)
+//{
+//	ofstream file(fileName, ios::app);
+//	{
+//		cout << "Enter your name:" << endl;
+//		cin >> name;
+//		cout << "Enter your password:" << endl;
+//		cin >> password;
+//		cout << "Enter your email:" << endl;
+//		cin >> email;
+//	}
+//
+//	file << "\nName:" << name << "\nPassword:" << password << "\nEmail:" << email << endl;
+//	file.close();
+//	cout << "Custormer personal data is saved!\n" << endl;
+//}
 
 void Person::collectNamesInArray()
 {
@@ -141,6 +200,11 @@ bool Person::linearSearch(const int* arr, int element)
 			return true;
 	}
 	return false;
+}
+
+void Person::print(const Person& p)
+{
+	cout << p.name << " " << p.password << " " << p.email << endl;
 }
 
 //DATA
@@ -180,6 +244,53 @@ void Data::showDetails(const char* destinationInfoFileName)
 	}
 
 	
+}
+
+void Data::saveDataToFile(ofstream& file, const Data& p)
+{
+	size_t destinationLength = strlen(p.destination);
+	size_t periodLength = strlen(p.period);
+	size_t commentLength = strlen(p.comment);
+
+	file.write((const char*)&destinationLength, sizeof(destinationLength));
+	file.write(p.destination, destinationLength);
+
+	file.write((const char*)&periodLength, sizeof(periodLength));
+	file.write(p.period, periodLength);
+
+	file.write((const char*)&commentLength, sizeof(commentLength));
+	file.write(p.comment, commentLength);
+
+	file.write((char*)&p.rating, sizeof(p.rating));
+}
+
+Data Data:: readInfoFromFile(ifstream& file)
+{
+	Data p;
+
+	size_t destinationLength;
+	size_t pariodLength;
+	size_t commentLength;
+
+	file.read((char*)&destinationLength, sizeof(destinationLength)); //we read the size of the name
+	p.destination = new char[destinationLength + 1];
+	file.read(p.destination, destinationLength);
+	p.destination[destinationLength] = '\0';
+
+	file.read((char*)&pariodLength, sizeof(pariodLength)); //we read the size of the password
+	p.period = new char[pariodLength + 1];
+	file.read(p.period, pariodLength);
+	p.period[pariodLength] = '\0';
+
+	file.read((char*)&commentLength, sizeof(commentLength)); //we read the size of the email
+	p.comment = new char[commentLength + 1];
+	file.read(p.comment, commentLength);
+	p.comment[commentLength] = '\0';
+
+	file.read((char*)&p.rating, sizeof(p.rating));
+
+	return p;
+
 }
 
 void Data::savePhotos(const char* photoFileName)

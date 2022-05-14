@@ -23,7 +23,9 @@ private:
 
 public:
 
-	void saveNamesToFile(const Person* customers, size_t count, ofstream& file);
+	Person createCustomer(const char* name, const char* password, const char* email);
+	void saveInfoToFile(ofstream& file, const Person& p);
+	Person readInfoFromFile(ifstream& file);
 
 	Person() : name(nullptr), password(nullptr), email(nullptr), size(1024) {}
 	Person(const char* name, const char* password, const char* email);
@@ -39,11 +41,14 @@ public:
 	void setPassword(const char* newPassword);
 	void setEmail(const char* newEmail);
 
-	void getInfo(const char* fileName);
+	//void getInfo(const char* fileName);
 
 	void collectNamesInArray();
 
 	bool linearSearch(const int* arr, int element);
+
+	void print(const Person& p);
+	
 	
 };
 
@@ -68,7 +73,12 @@ private:
 
 	/*void destinationInfo(const char* destinationInfoFileName);*/
 
+	
+
 public:
+
+	void saveDataToFile(ofstream&  file, const Data& p);
+	Data readInfoFromFile(ifstream& file);
 
 	Data() : destination(nullptr), period(nullptr), comment(nullptr), rating(0), photo(nullptr) {}
 	Data(const char* destination, const char* period, const char* comment);
