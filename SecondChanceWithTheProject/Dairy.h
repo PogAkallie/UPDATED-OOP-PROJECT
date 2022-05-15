@@ -77,6 +77,7 @@ private:
 
 public:
 
+	Data createDestinationInfo(const char* destination, const char* period, const char* comment, int rating);
 	void saveDataToFile(ofstream&  file, const Data& p);
 	Data readInfoFromFile(ifstream& file);
 
@@ -86,8 +87,8 @@ public:
 	Data& operator=(const Data& other);
 	~Data();
 
-	void destinationInfo(const char* destinationInfoFileName);
-	void showDetails(const char* destinationInfoFileName);
+	/*void destinationInfo(const char* destinationInfoFileName);
+	void showDetails(const char* destinationInfoFileName);*/
 
 	void setDestinastion(const char* NewDestination);
 	void setPeriod(const char* NewPeriod);
@@ -96,5 +97,5 @@ public:
 	void savePhotos(const char* photoFileName);
 	void showPhotos(const char* photoFileName);
 
-	void print() const;
+	void print(const Data& d) const;
 };

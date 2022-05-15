@@ -209,42 +209,63 @@ void Person::print(const Person& p)
 
 //DATA
 
-void Data::destinationInfo(const char* destinationInfoFileName)
+Data Data::createDestinationInfo(const char* destination, const char* period, const char* comment, int rating)
 {
-	ofstream file(destinationInfoFileName, ios::app);
-	{
-		cout << "Enter your destination:" << endl;
-		cin >> destination;
-		cout << "Enter your period(example-> date/month/year - date/month/year) :" << endl;
-		cin >> period;
-		cout << "Enter your comment:" << endl;
-		cin >> comment;
-		cout << "Your rating from 1 to 10 is:" << endl;
-		cin >> rating;
-	}
+	Data d;
 
-	file << "\nDestination:" << destination << "\nPeriod:" << period << "\nComment:" << comment << "\nRating:" << rating << endl;
-	file.close();
-	cout << "Customer travels are saved!" << endl;
+	size_t destinationLength = strlen(destination);
+	d.destination = new char[destinationLength + 1];
+	strcpy(d.destination, destination);
+
+	size_t periodLength = strlen(period);
+	d.period = new char[periodLength + 1];
+	strcpy(d.period, period);
+
+	size_t commentLength = strlen(comment);
+	d.comment = new char[commentLength + 1];
+	strcpy(d.comment, comment);
+
+	d.rating = rating;
+
+	return d;
 }
 
-void Data::showDetails(const char* destinationInfoFileName)
-{
-	ifstream file(destinationInfoFileName);
-	{
-		if (!file.is_open())
-		{
-			cout << "File Error!" << endl;
-		}
-		while (!file.eof())
-		{
-			file >> destination >> period >> comment >> rating;
-		}
-		file.close();
-	}
-
-	
-}
+//void Data::destinationInfo(const char* destinationInfoFileName)
+//{
+//	ofstream file(destinationInfoFileName, ios::app);
+//	{
+//		cout << "Enter your destination:" << endl;
+//		cin >> destination;
+//		cout << "Enter your period(example-> date/month/year - date/month/year) :" << endl;
+//		cin >> period;
+//		cout << "Enter your comment:" << endl;
+//		cin >> comment;
+//		cout << "Enter your comment:" << endl;
+//		cin >> comment;
+//	}
+//
+//	file << "\nDestination:" << destination << "\nPeriod:" << period << "\nComment:" << comment << "\nRating:" << rating << endl;
+//	file.close();
+//	cout << "Customer travels are saved!" << endl;
+//}
+//
+//void Data::showDetails(const char* destinationInfoFileName)
+//{
+//	ifstream file(destinationInfoFileName);
+//	{
+//		if (!file.is_open())
+//		{
+//			cout << "File Error!" << endl;
+//		}
+//		while (!file.eof())
+//		{
+//			file >> destination >> period >> comment >> rating;
+//		}
+//		file.close();
+//	}
+//
+//	
+//}
 
 void Data::saveDataToFile(ofstream& file, const Data& p)
 {
@@ -262,6 +283,8 @@ void Data::saveDataToFile(ofstream& file, const Data& p)
 	file.write(p.comment, commentLength);
 
 	file.write((char*)&p.rating, sizeof(p.rating));
+
+	cout << "Customer travels are saved!" << endl;
 }
 
 Data Data:: readInfoFromFile(ifstream& file)
@@ -269,7 +292,7 @@ Data Data:: readInfoFromFile(ifstream& file)
 	Data p;
 
 	size_t destinationLength;
-	size_t pariodLength;
+	size_t periodLength;
 	size_t commentLength;
 
 	file.read((char*)&destinationLength, sizeof(destinationLength)); //we read the size of the name
@@ -277,10 +300,10 @@ Data Data:: readInfoFromFile(ifstream& file)
 	file.read(p.destination, destinationLength);
 	p.destination[destinationLength] = '\0';
 
-	file.read((char*)&pariodLength, sizeof(pariodLength)); //we read the size of the password
-	p.period = new char[pariodLength + 1];
-	file.read(p.period, pariodLength);
-	p.period[pariodLength] = '\0';
+	file.read((char*)&periodLength, sizeof(periodLength)); //we read the size of the password
+	p.period = new char[periodLength + 1];
+	file.read(p.period, periodLength);
+	p.period[periodLength] = '\0';
 
 	file.read((char*)&commentLength, sizeof(commentLength)); //we read the size of the email
 	p.comment = new char[commentLength + 1];
@@ -340,8 +363,8 @@ void Data::copyFrom(const Data& other)
 	comment = new char[strlen(other.comment) + 1];
 	strcpy(comment, other.comment);
 
-	photo = new char[strlen(other.photo) + 1];
-	strcpy(photo, other.photo);
+	/*photo = new char[strlen(other.photo) + 1];
+	strcpy(photo, other.photo);*/
 }
 
 bool Data::checkIsPeriodValid(int month, int day, int year)
@@ -440,7 +463,7 @@ bool Data::checkifTheSecondPeriodIsGreater(char* startDate, char* endDate)
 
 }
 
-void Data::print() const
+void Data::print(const Data& d) const
 {
-	cout << destination << " " << period << " " << comment << " " << rating << " " << endl;
+	cout << d.destination << " " << d.period << " " << d.comment << " " << d.rating << " " << endl;
 }
