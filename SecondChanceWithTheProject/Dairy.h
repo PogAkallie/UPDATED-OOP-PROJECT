@@ -16,16 +16,16 @@ private:
 	void free();
 	void copyFrom(const Person& other);
 
-	bool validatingName(char ch);
+	
 
 	/*void saveNamesToFile(const Person* customers, size_t count, ofstream& file);*/
 
 
 public:
-
-	Person createCustomer(const char* name, const char* password, const char* email);
-	void saveInfoToFile(ofstream& file, const Person& p);
-	Person readInfoFromFile(ifstream& file);
+	bool validatingName(const char* name, char ch);
+	Person createCustomer(const char* name, const char* password, const char* email);//studied from seminars
+	void saveInfoToFile(ofstream& file, const Person& p); //studied from seminars
+	Person readInfoFromFile(ifstream& file); //studied from seminars
 
 	Person() : name(nullptr), password(nullptr), email(nullptr), size(1024) {}
 	Person(const char* name, const char* password, const char* email);
@@ -77,9 +77,9 @@ private:
 
 public:
 
-	Data createDestinationInfo(const char* destination, const char* period, const char* comment, int rating);
-	void saveDataToFile(ofstream&  file, const Data& p);
-	Data readInfoFromFile(ifstream& file);
+	Data createDestinationInfo(const char* destination, const char* period, const char* comment, int rating);//studied from seminars
+	void saveDataToFile(ofstream&  file, const Data& p);//studied from seminars
+	Data readInfoFromFile(ifstream& file);//studied from seminars
 
 	Data() : destination(nullptr), period(nullptr), comment(nullptr), rating(0), photo(nullptr) {}
 	Data(const char* destination, const char* period, const char* comment);

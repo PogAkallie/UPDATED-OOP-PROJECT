@@ -29,7 +29,7 @@ void Person::copyFrom(const Person& other)
 	strcpy(email, other.email);
 }
 
-bool Person::validatingName(char ch)
+bool Person::validatingName(const char* name, char ch)
 {
 	return (name[ch] <= 'a' && name[ch] >= 'z') || (!ch <= 'A' && name[ch] >= 'Z') || (name[ch] == ' ' || name[ch] == '\n') || (name[ch] >= '0' && name[ch] <= '9');
 }
@@ -42,6 +42,7 @@ Person Person::createCustomer(const char* name, const char* password, const char
 	p.name = new char[nameLength + 1];
 	strcpy(p.name, name);
 	
+	
 	size_t passwordLength = strlen(password);
 	p.password = new char[passwordLength + 1];
 	strcpy(p.password, password);
@@ -52,8 +53,6 @@ Person Person::createCustomer(const char* name, const char* password, const char
 
 	return p;
 }
-
-//public
 
 void Person::saveInfoToFile(ofstream& file, const Person& p)
 {

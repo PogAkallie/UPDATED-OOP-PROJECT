@@ -1,6 +1,6 @@
 #pragma once
 #include <fstream>
-
+//not mine (described in the documentation)
 class MyString
 {
 	char* str;
@@ -15,10 +15,9 @@ public:
 
 	MyString(const MyString&);
 
-	MyString(MyString&&); //move constructor that accepts rvalue;
-
+	MyString(MyString&&); 
 	MyString& operator=(const MyString& other);
-	MyString& operator=(MyString&& other);  //move op= that accepts rvalue;
+	MyString& operator=(MyString&& other);  
 
 	~MyString();
 
